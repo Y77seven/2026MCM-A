@@ -1,0 +1,688 @@
+{
+  "meta": {
+    "version": "7.0_Tournament_Ready",
+    "creation_date": "2026-01-23",
+    "architect": "MCM_A_Methodology_Agent",
+    "philosophy": "Physical Intuition → Mathematical Formalization → Rigorous Validation; Deterministic Skeleton + Expert Add-ons (Stochastic/Spatial/Pareto)",
+    "design_principles": [
+      "先可解释、再复杂（Explainability First）",
+      "复杂度预算：最多启用 1–2 个 Expert Add-ons（除非题目强制要求）",
+      "每启用一个 Expert Rule，必须产出对应的“高级图 + 指标”，否则宁可不用",
+      "数值方法必须声明边界条件与稳定性条件（最低限度一句话）"
+    ],
+    "description": "面向 MCM/ICM A 类连续系统题的可调用规则库：主路由(Type A/B/C) + Expert 开关(STO/SPAT/Pareto) + 交付件协议(Deliverable Contracts) + 数值安全护栏。",
+    "supported_problem_types": [
+      "TYPE_A_DESCRIPTIVE (生态/增长/稳定性)",
+      "TYPE_B_OPTIMIZATION (机械/能量/策略)",
+      "TYPE_C_HYBRID (建模 + 控制/轨迹)",
+      "Expert_Addons: Stochastic / Spatial / Multi-objective"
+    ],
+    "total_rules": 9,
+    "core_rules": [
+      "ASMP_001",
+      "MOD_012",
+      "EQ_009",
+      "VALID_005",
+      "FBD_001",
+      "OPT_001",
+      "STO_001",
+      "SPAT_001",
+      "OPT_002"
+    ],
+    "default_time_budget_minutes": {
+      "T0_router": 10,
+      "T1_skeleton": 50,
+      "T2_validate": 40,
+      "T3_write": 120
+    }
+  },
+  "quick_index": {
+    "by_problem_scenario": {
+      "缺少数据/未知参数": [
+        "ASMP_001"
+      ],
+      "增长/衰减/长期预测": [
+        "MOD_012",
+        "VALID_005"
+      ],
+      "参数随环境/时间变化": [
+        "EQ_009"
+      ],
+      "验证系统稳定性/鲁棒性": [
+        "VALID_005",
+        "STO_001"
+      ],
+      "受力分析/能量消耗/运动方程": [
+        "FBD_001"
+      ],
+      "制定最佳策略/控制/轨迹": [
+        "OPT_001",
+        "FBD_001",
+        "EQ_009"
+      ],
+      "环境有噪声/风险/概率": [
+        "STO_001"
+      ],
+      "扩散/传播/迁移/分布": [
+        "SPAT_001"
+      ],
+      "多个冲突目标": [
+        "OPT_002"
+      ]
+    },
+    "by_output_artifact": {
+      "parameter_table": [
+        "ASMP_001",
+        "FBD_001"
+      ],
+      "confidence_band": [
+        "STO_001"
+      ],
+      "heatmap_spatial": [
+        "SPAT_001"
+      ],
+      "pareto_frontier": [
+        "OPT_002"
+      ],
+      "phase_portrait": [
+        "VALID_005"
+      ],
+      "dynamic_param_plot": [
+        "EQ_009"
+      ]
+    },
+    "by_keyword": {
+      "growth": [
+        "MOD_012",
+        "VALID_005"
+      ],
+      "stability": [
+        "VALID_005",
+        "STO_001"
+      ],
+      "optimize": [
+        "OPT_001",
+        "FBD_001",
+        "OPT_002"
+      ],
+      "unknown": [
+        "ASMP_001"
+      ],
+      "dynamic": [
+        "EQ_009"
+      ],
+      "risk": [
+        "STO_001"
+      ],
+      "spread": [
+        "SPAT_001"
+      ],
+      "trade-off": [
+        "OPT_002"
+      ]
+    },
+    "by_math_tool": {
+      "ODE": [
+        "MOD_012",
+        "FBD_001"
+      ],
+      "Linearization/Eigenvalues": [
+        "VALID_005"
+      ],
+      "Scaling/Dimensional": [
+        "ASMP_001",
+        "FBD_001"
+      ],
+      "Optimal Control/Optimization": [
+        "OPT_001",
+        "OPT_002"
+      ],
+      "Monte Carlo/Statistics": [
+        "STO_001"
+      ],
+      "PDE/Graph Laplacian": [
+        "SPAT_001"
+      ]
+    },
+    "by_complexity": {
+      "Level_1_Basic": [
+        "ASMP_001",
+        "MOD_012",
+        "FBD_001"
+      ],
+      "Level_2_Advanced": [
+        "EQ_009",
+        "OPT_001",
+        "VALID_005"
+      ],
+      "Level_3_Expert_Addons": [
+        "STO_001",
+        "SPAT_001",
+        "OPT_002"
+      ]
+    }
+  },
+  "__ROUTER__": {
+    "PRIMARY_TYPE_ROUTER": {
+      "TYPE_A_DESCRIPTIVE": {
+        "description": "描述/分析/预测型：增长、生态平衡、长期趋势、稳定性。",
+        "trigger_keywords": [
+          "predict",
+          "analyze",
+          "describe",
+          "growth",
+          "stability",
+          "population",
+          "ecology",
+          "trend",
+          "长期",
+          "预测",
+          "稳定",
+          "增长"
+        ],
+        "base_rules": [
+          "ASMP_001",
+          "MOD_012",
+          "EQ_009",
+          "VALID_005"
+        ],
+        "typical_workflow": "ASMP_001 → MOD_012 → (EQ_009) → VALID_005 → (STO_001 可选)",
+        "default_paper_skeleton": [
+          "Assumptions",
+          "Parameter Estimation",
+          "Governing Equations",
+          "Dynamic Extensions",
+          "Validation/Stability",
+          "Scenario Results",
+          "Sensitivity/Robustness",
+          "Discussion"
+        ]
+      },
+      "TYPE_B_OPTIMIZATION": {
+        "description": "优化/设计型：能量、功率、最短时间、最小成本、策略制定。",
+        "trigger_keywords": [
+          "optimize",
+          "strategy",
+          "minimize",
+          "maximize",
+          "best",
+          "design",
+          "control",
+          "功率",
+          "能量",
+          "最优",
+          "策略",
+          "控制"
+        ],
+        "base_rules": [
+          "FBD_001",
+          "OPT_001",
+          "EQ_009",
+          "VALID_005"
+        ],
+        "typical_workflow": "FBD_001 → OPT_001 → (EQ_009) → VALID_005 → (OPT_002 可选)",
+        "default_paper_skeleton": [
+          "Assumptions",
+          "FBD & Dynamics",
+          "Objective/Constraints",
+          "Solution Method",
+          "Validation",
+          "Trade-off (Optional)",
+          "Results",
+          "Sensitivity",
+          "Discussion"
+        ]
+      },
+      "TYPE_C_HYBRID": {
+        "description": "混合型：先建模物理过程/环境，再优化控制或轨迹；常见于“变环境最优轨迹”。",
+        "trigger_keywords": [
+          "trajectory",
+          "path",
+          "route",
+          "control",
+          "dynamic environment",
+          "model and optimize",
+          "轨迹",
+          "路径",
+          "变环境"
+        ],
+        "base_rules": [
+          "ASMP_001",
+          "FBD_001",
+          "EQ_009",
+          "OPT_001",
+          "VALID_005"
+        ],
+        "typical_workflow": "ASMP_001/FBD_001 → EQ_009 → OPT_001 → VALID_005 → (SPAT_001 / STO_001 / OPT_002 按需)",
+        "default_paper_skeleton": [
+          "Assumptions",
+          "Dynamics Model",
+          "Environment Function",
+          "Optimization Formulation",
+          "Solution Method",
+          "Validation",
+          "Robustness",
+          "Discussion"
+        ]
+      }
+    },
+    "EXPERT_SWITCHBOARD": {
+      "max_addons_recommended": 2,
+      "addon_priority_if_not_forced": [
+        "OPT_002",
+        "STO_001",
+        "SPAT_001"
+      ],
+      "decision_rule": "若题目明确要求(风险/空间/权衡)则必须启用对应 Expert；否则从加分产出角度最多选 1–2 个外挂，并确保能产出对应图与指标。",
+      "addons": {
+        "STO_001": {
+          "when": "出现 risk/uncertainty/probability/robustness 或题目强调极端情形/波动",
+          "must_output": [
+            "Mean + 95% CI band",
+            "至少一个风险指标：P(failure) 或 P(>threshold) 或 CVaR"
+          ]
+        },
+        "SPAT_001": {
+          "when": "出现 spread/diffusion/migration/distribution/heatmap 或明显空间异质性",
+          "must_output": [
+            "至少一张空间分布图(heatmap/contour)",
+            "边界条件 + 数值稳定性一句话"
+          ]
+        },
+        "OPT_002": {
+          "when": "出现两个以上冲突目标(安全vs速度、成本vs性能等)",
+          "must_output": [
+            "Pareto scatter + Front",
+            "选择一个推荐点(knee 或权重偏好)并解释"
+          ]
+        }
+      }
+    },
+    "SAFEGUARDS": {
+      "no_fake_stochasticity": "只要用 STO_001，就必须 runs>=300 并画出分布/置信带；否则不要写随机。",
+      "no_forced_pde": "SPAT_001 默认优先 Patch/Network 离散模型；PDE 仅在题目确有连续介质假设时使用。",
+      "numerical_stability_minimum": "显式差分必须写出 D*dt/dx^2 稳定条件；否则改用更小 dt 或改成隐式/离散网络。",
+      "pareto_must_decide": "画 Pareto 之后必须给出推荐点与理由(拐点/偏好/约束)。"
+    }
+  },
+  "deliverable_contracts": {
+    "baseline_must_have": [
+      "参数表(带单位) + 关键参数来源/估算方法",
+      "核心控制方程/动力学推导(不是直接套公式)",
+      "至少一种验证：稳定性(特征值/相图) 或 物理守恒/极限检查",
+      "至少一种敏感性/鲁棒性：参数扰动、情景对比或 STO_001 概率带",
+      "清晰的局限性与可改进点(Discussion)"
+    ],
+    "expert_rule_contracts": {
+      "STO_001": [
+        "置信带图",
+        "风险指标(概率或CVaR)",
+        "σ 选取依据一句话"
+      ],
+      "SPAT_001": [
+        "空间图(热力/等值线)",
+        "边界条件",
+        "稳定条件或离散网络解释"
+      ],
+      "OPT_002": [
+        "Pareto 图",
+        "非支配点/前沿说明",
+        "最终推荐点(拐点/偏好)"
+      ]
+    }
+  },
+  "core_rules": [
+    {
+      "id": "ASMP_001",
+      "name": "Scaling Law Anchoring (标度律锚定)",
+      "level": "Level_1_Basic",
+      "type": "descriptive",
+      "trigger": "缺少数据 + 存在物理相似系统/同类尺度规律",
+      "inputs": [
+        "reference_value Y_ref",
+        "reference_scale X_ref",
+        "target_scale X_tar",
+        "beta (选择)",
+        "units"
+      ],
+      "action_steps": [
+        "1) 选择相似系统作为锚点(给出理由)",
+        "2) 选指数 β：2/3(表面积散热), 3/4(代谢分形网络), 1/3(线性尺度), 1(线性守恒量)",
+        "3) 计算 Y_tar = Y_ref*(X_tar/X_ref)^β，并给出不确定度范围(±10% 或来自上下界)",
+        "4) 量纲检查 + 极限检查(小尺度/大尺度是否合理)"
+      ],
+      "go_no_go_thresholds": {
+        "beta_linear_warning": "若随意取 β=1 且无守恒解释，属于高风险；应优先尝试 2/3 或 3/4 并解释机制。"
+      },
+      "deliverables": [
+        "参数表(含 β 与依据)",
+        "一段物理类比解释(为什么是这个 β)",
+        "误差条/范围(即使是粗略 ±10%)"
+      ],
+      "magic_phrases": {
+        "cn": "在缺乏直接数据的情况下，我们利用物理相似性与标度律 Y ∝ X^β 来估算关键参数，其中 β 源自[机制]。",
+        "en": "In the absence of direct data, we estimate the key parameter via a scaling law Y ∝ X^β, where β is justified by the underlying physical mechanism."
+      }
+    },
+    {
+      "id": "MOD_012",
+      "name": "Resource-Constrained Growth (资源受限增长/衰减)",
+      "level": "Level_1_Basic",
+      "type": "descriptive",
+      "trigger": "存在自增长/累积 + 物理/资源上限 或 长期趋势需要不发散",
+      "inputs": [
+        "state X(t)",
+        "rate r",
+        "capacity K or X_max",
+        "initial X0"
+      ],
+      "action_steps": [
+        "1) 从机理写出：增长项 rX，阻滞项 (1 - X/K)",
+        "2) 得到 ODE：dX/dt = rX(1 - X/K)（或带额外损耗项）",
+        "3) 求平衡点 X*=0, K，并给出物理解释",
+        "4) 用解析解或数值解画出时间曲线；做 t→∞ 极限检查"
+      ],
+      "validation": [
+        "渐近行为：X(t) → K（若 r>0）",
+        "若题目是衰减/消耗，可用 dX/dt = -kX 或带下限的饱和衰减"
+      ],
+      "deliverables": [
+        "方程推导(一段文字 + 方程)",
+        "平衡点与物理含义",
+        "时间曲线 + 至少一组情景对比(r/K变化)"
+      ],
+      "magic_phrases": {
+        "cn": "为刻画受资源上限约束的动态过程，我们引入负反馈项 (1 - X/K)，从而保证长期行为渐近收敛。",
+        "en": "To capture growth under finite resources, we introduce the negative feedback (1 - X/K), ensuring the trajectory asymptotically converges rather than diverges."
+      }
+    },
+    {
+      "id": "EQ_009",
+      "name": "Dynamic Parameterization (动态参数函数化)",
+      "level": "Level_2_Advanced",
+      "type": "universal",
+      "trigger": "参数随时间/空间/状态变化显著，或存在关键梯度（坡度/密度/温度等）",
+      "inputs": [
+        "parameter P",
+        "drivers (x,t,state)",
+        "boundary/limits"
+      ],
+      "action_steps": [
+        "1) 量化变化率：R = (P_max - P_min)/P_avg",
+        "2) 若 R > 0.2，强制函数化：P → P(x,t) 或 P(state)",
+        "3) 选择函数族：指数(衰减/稀薄), Logistic(饱和/过渡), 幂律(尺度/分形)",
+        "4) 连续性检查：P 与 dP/dx 不出现跳变；避免分段常数",
+        "5) 输出参数函数图(随 x 或 t 变化)以展示异质性"
+      ],
+      "go_no_go_thresholds": {
+        "R_dynamic_required": "R > 0.2 必须动态化",
+        "no_piecewise_constant": "除非题目强制离散阶段，否则禁止分段常数造成导数奇异"
+      },
+      "deliverables": [
+        "P(x,t) 的显式表达式",
+        "P 随 x/t 的曲线图",
+        "边界/极限解释(例如高空密度趋近 0)"
+      ],
+      "magic_phrases": {
+        "cn": "与其采用分段常数近似，我们将参数构造为连续可微的函数 P(x,t)，以刻画环境异质性并提高数值稳定性。",
+        "en": "Rather than imposing piecewise constants, we formulate the coefficient as a continuous differentiable function P(x,t) to capture heterogeneity and improve numerical stability."
+      }
+    },
+    {
+      "id": "VALID_005",
+      "name": "Phase Plane & Stability Verification (相平面/稳定性验证)",
+      "level": "Level_2_Advanced",
+      "type": "universal",
+      "trigger": "耦合 ODE 系统、存在平衡态、需要证明鲁棒性/稳定性",
+      "inputs": [
+        "ODE system x_dot=f(x)",
+        "equilibrium points",
+        "Jacobian J"
+      ],
+      "action_steps": [
+        "1) 求平衡点 x*：令 f(x*)=0",
+        "2) 线性化：δx_dot = J(x*) δx",
+        "3) 求特征值 λ：Re(λ)<0 稳定；Re(λ)>0 不稳定；Im(λ) 表示振荡",
+        "4) 2D 系统画相图/流场 + 零斜线(nullclines)",
+        "5) 若维度>2：至少给出主导特征值 + 进行扰动仿真(对初值 ±ε)"
+      ],
+      "deliverables": [
+        "平衡点列表",
+        "特征值表 + 物理解释(阻尼/过阻尼/失稳)",
+        "相图(2D) 或 扰动对比曲线(高维)",
+        "一句话总结：模型对初值扰动是否鲁棒"
+      ],
+      "magic_phrases": {
+        "cn": "我们通过平衡点线性化与特征值分析验证稳定性，并用相图展示系统对初值扰动的鲁棒性。",
+        "en": "We verify stability via linearization at equilibria and eigenvalue analysis, and visualize robustness through phase portraits (or perturbation simulations for higher dimensions)."
+      }
+    },
+    {
+      "id": "FBD_001",
+      "name": "Force/Energy Anchoring (受力/能量锚定)",
+      "level": "Level_1_Basic",
+      "type": "optimization",
+      "trigger": "物体在物理场中运动/能量收支/功率平衡",
+      "inputs": [
+        "mass m",
+        "velocity v",
+        "forces (drag/roll/gravity)",
+        "efficiency η",
+        "geometry"
+      ],
+      "action_steps": [
+        "1) 画 FBD：列出所有力/功率项（至少写清空气阻力、滚阻/摩擦、重力分量）",
+        "2) 建立方程：F=ma 或 功率平衡 P_in = P_losses + dE/dt",
+        "3) 数量级分析：计算各项占比，<1% 的项才可忽略（并说明）",
+        "4) 输出“主导项结论”：在某速度区间谁主导(例如 F_drag ~ v^2)"
+      ],
+      "deliverables": [
+        "FBD 图(可简图) + 力/功率表达式",
+        "功率/动力学方程",
+        "数量级占比表(至少一句话)"
+      ],
+      "magic_phrases": {
+        "cn": "我们从第一性原理出发，通过受力/功率平衡建立控制方程，并用数量级分析识别主导阻力项。",
+        "en": "Starting from first principles, we derive the governing equations via force/power balance and identify dominant resistance terms by order-of-magnitude analysis."
+      }
+    },
+    {
+      "id": "OPT_001",
+      "name": "Single-Objective Optimization (单目标优化建模)",
+      "level": "Level_2_Advanced",
+      "type": "optimization",
+      "trigger": "寻找最优策略/控制输入/最短时间/最小能耗等单目标",
+      "inputs": [
+        "decision u(t) or discrete u_k",
+        "objective J",
+        "constraints g(x,u)≤0",
+        "dynamics x_dot=f(x,u)"
+      ],
+      "action_steps": [
+        "1) 明确定义：状态 x、控制 u、目标 J、约束 g、边界条件",
+        "2) 将 FBD_001 给出的动力学写成约束：x_dot=f(x,u)",
+        "3) 选择求解方式：解析(少数) / 离散化+数值优化(常用) / 变分法(加分)",
+        "4) 输出最优策略 u*(t) 或 u*_k，并解释其物理意义(为什么这样分配)"
+      ],
+      "deliverables": [
+        "Optimization Box：min J, s.t. dynamics + bounds",
+        "最优策略曲线/表格(随时间或路段)",
+        "至少一个敏感性：约束变化(Pmax/Emax)对策略影响"
+      ],
+      "magic_phrases": {
+        "cn": "我们将策略制定形式化为优化问题：在满足物理约束的前提下最小化目标函数 J，并求得控制变量的最优时间历程。",
+        "en": "We formulate the strategy as an optimization problem: minimize J subject to physical constraints, and compute the optimal time history of the control variable."
+      }
+    },
+    {
+      "id": "STO_001",
+      "name": "Stochastic Injection Analysis (随机注入/风险量化)",
+      "level": "Level_3_Expert_Addons",
+      "type": "universal",
+      "trigger": "题目提及风险/概率/不确定性/波动，或需要高级鲁棒性验证",
+      "choose_noise_model": {
+        "parameter_uncertainty": "参数不确定 -> 参数随机化（优先）",
+        "process_noise": "环境波动/外界扰动 -> 在 ODE 中加入过程噪声(SDE)"
+      },
+      "sigma_calibration": {
+        "if_percent_given": "若题目给出“约±p%波动”，取 σ = p",
+        "if_bounds_given": "若只给上下界[pmin,pmax]，取 CV ≈ (pmax-pmin)/(2*pmean)，σ=CV",
+        "fallback_default": "若无信息，默认 σ=0.1，并在敏感性中扫描 σ∈[0.05,0.2]"
+      },
+      "monte_carlo_protocol": {
+        "runs_min": 300,
+        "runs_recommended": 1000,
+        "outputs": [
+          "median",
+          "mean",
+          "95% CI (2.5%-97.5%)"
+        ],
+        "convergence_check": "可选：runs 翻倍后 CI 宽度变化 <5% 视为收敛"
+      },
+      "risk_metrics": {
+        "prob_failure": "P(constraint violated)",
+        "prob_threshold": "P(Y > Y_crit) 或 P(Y < Y_crit)",
+        "cvar": "CVaR_α（例如 α=0.95）用于极端风险"
+      },
+      "deliverables": [
+        "均值/中位数曲线 + 95% 置信带",
+        "至少一个风险指标(概率或CVaR)",
+        "σ 的选取依据一句话"
+      ],
+      "common_pitfalls": {
+        "fake_stochasticity": "只跑一次带随机数 -> 无统计意义；必须 runs>=300",
+        "no_calibration": "不给 σ 来源 -> 评委会认为随意"
+      },
+      "magic_phrases": {
+        "cn": "为刻画环境波动带来的风险，我们引入随机扰动并通过 Monte Carlo 模拟生成预测置信带，同时用失效概率/极端风险指标量化不确定性。",
+        "en": "To account for volatility, we introduce stochastic perturbations and generate confidence bands via Monte Carlo simulations, quantifying uncertainty through failure probabilities (or tail-risk metrics such as CVaR)."
+      }
+    },
+    {
+      "id": "SPAT_001",
+      "name": "Spatial Dynamics Anchoring (空间动力学/扩散/传播)",
+      "level": "Level_3_Expert_Addons",
+      "type": "descriptive",
+      "trigger": "题目涉及分布/扩散/传播/迁移/空间异质性，或需要输出空间热力图",
+      "default_choice": "优先 Patch/Network 离散模型（稳定、好解释、易编程）；PDE 作为可选升级",
+      "model_options": {
+        "patch_network": {
+          "form": "du_i/dt = f(u_i) + D * Σ_{j∈N(i)} (u_j - u_i)",
+          "interpretation": "区域 i 与邻域交换通量，等价于图拉普拉斯扩散"
+        },
+        "reaction_diffusion_pde": {
+          "form": "∂u/∂t = D∇²u + f(u)",
+          "interpretation": "连续介质扩散 + 反应项"
+        }
+      },
+      "boundary_conditions": {
+        "default_no_flux": "Neumann(无通量)  ∂u/∂n = 0  （最通用）",
+        "alternative_fixed": "Dirichlet(固定值) u = u0"
+      },
+      "numerical_stability": {
+        "explicit_fdm_1d": "显式差分需满足 r = D*dt/dx^2 ≤ 0.5",
+        "explicit_fdm_2d": "2D 常用 r ≤ 0.25（保守写法）",
+        "fallback": "若不满足：减小 dt 或改用 Patch/Network 或隐式法"
+      },
+      "deliverables": [
+        "空间分布图(heatmap/contour) 至少 1 张",
+        "边界条件一句话(默认无通量)",
+        "稳定性条件一句话(若用显式差分)",
+        "解释 D 的物理含义(扩散强度/迁移率)"
+      ],
+      "common_pitfalls": {
+        "forced_pde": "写复杂 PDE 但无数值实现/无边界条件 -> 高风险",
+        "unstable_dt": "显式差分不检查 r -> 解发散"
+      },
+      "magic_phrases": {
+        "cn": "将模型扩展到空间域后，我们通过扩散项(离散网络拉普拉斯或 D∇²u)刻画区域间迁移，并用热力图展示空间异质性演化。",
+        "en": "Extending to the spatial domain, we model migration via a diffusion term (graph Laplacian or D∇²u) and visualize spatial heterogeneity through heatmaps over time."
+      }
+    },
+    {
+      "id": "OPT_002",
+      "name": "Pareto Trade-off Analysis (多目标/Pareto 权衡)",
+      "level": "Level_3_Expert_Addons",
+      "type": "optimization",
+      "trigger": "存在两个及以上冲突目标(速度vs安全、成本vs性能、能耗vs覆盖等)",
+      "pareto_generation_protocol": {
+        "method": "加权和扫描 + 非支配筛选",
+        "weights": "取 w∈{0,0.1,...,1} 或 11–21 个权重点",
+        "solve": "每个 w 解一次 min Jw = wJ1 + (1-w)J2（可扩展到多目标）",
+        "filter": "对 (J1,J2) 做 non-dominated filtering 得到 Pareto Front"
+      },
+      "decision_recommendation": {
+        "default_knee": "默认推荐拐点(knee point)：边际收益骤降处",
+        "if_preference": "若题目偏好明确(安全优先/成本优先)，据此选择权重或约束下的点"
+      },
+      "deliverables": [
+        "Pareto 散点图 + 标出 Pareto Front",
+        "标注推荐点(拐点或偏好点)并给出 2–3 句解释",
+        "一张小表：推荐点对应的决策变量与两目标值"
+      ],
+      "common_pitfalls": {
+        "no_decision": "画了 Pareto 不给推荐点 -> 评委会认为不完整",
+        "not_nondominated": "不做非支配筛选 -> 前沿不可信"
+      },
+      "magic_phrases": {
+        "cn": "鉴于[目标A]与[目标B]天然冲突，我们采用多目标优化构造 Pareto 前沿，并据拐点/偏好选择最合适的折中方案。",
+        "en": "Recognizing the inherent conflict between Objective A and B, we construct the Pareto frontier via multi-objective optimization and select a balanced compromise (e.g., the knee point) for recommendation."
+      }
+    }
+  ],
+  "paper_templates": {
+    "universal_one_page_outline": [
+      "1. Executive Summary (结论先行：模型+结论+建议)",
+      "2. Assumptions & Notation (假设必须物理化)",
+      "3. Model Derivation (核心推导：ASMP/MOD/FBD)",
+      "4. Extensions (动态参数EQ/空间SPAT/随机STO/权衡OPT_002)",
+      "5. Validation (VALID：特征值/相图/极限检查/扰动仿真)",
+      "6. Results (情景 + 图表)",
+      "7. Sensitivity/Robustness",
+      "8. Discussion (局限 + 改进)"
+    ],
+    "where_to_insert_expert_addons": {
+      "STO_001": "Results 或 Sensitivity/Robustness 章节（用置信带与风险指标）",
+      "SPAT_001": "Model Extensions 章节（给出离散空间方程 + 热力图）",
+      "OPT_002": "Results 或 Discussion（给出 Pareto 前沿 + 推荐点）"
+    }
+  },
+  "competition_mode": {
+    "10_min_router_protocol": [
+      "Q1: 任务是 predict/understand 还是 optimize/design？",
+      "Q2: 状态是时间演化还是空间分布？",
+      "Q3: 是否强调 risk/uncertainty 或 trade-off？",
+      "→ 选 TYPE A/B/C 主骨架",
+      "→ 根据 Q2/Q3 决定是否启用 STO/SPAT/OPT_002（最多 2 个）"
+    ],
+    "minimum_figures_set": {
+      "baseline": [
+        "核心时间曲线(1)",
+        "验证图：相图/扰动对比(1)",
+        "动态参数函数图(可选1)"
+      ],
+      "with_STO": [
+        "置信带图(1) + 风险指标图/表(1)"
+      ],
+      "with_SPAT": [
+        "热力图/等值线(>=1)"
+      ],
+      "with_OPT_002": [
+        "Pareto 图(1) + 推荐点表(1)"
+      ]
+    }
+  },
+  "code_repository": {
+    "python_utils": {
+      "apply_scaling_law": "def apply_scaling_law(Y_ref, X_ref, X_tar, beta):\n    return Y_ref * (X_tar / X_ref) ** beta\n",
+      "logistic_growth_model": "def logistic_rhs(X, t, r, K):\n    return r * X * (1 - X / K)\n",
+      "parameterize_sigmoid": "import numpy as np\n\ndef sigmoid_transition(x, x0, k, low, high):\n    # Smoothly transitions from low to high\n    return low + (high-low)/(1+np.exp(-k*(x-x0)))\n",
+      "jacobian_eig_numeric": "import numpy as np\n\ndef numeric_jacobian(f, x, eps=1e-6):\n    x = np.array(x, dtype=float)\n    n = x.size\n    J = np.zeros((n,n))\n    fx = np.array(f(x))\n    for i in range(n):\n        x2 = x.copy(); x2[i] += eps\n        J[:,i] = (np.array(f(x2)) - fx) / eps\n    return J\n",
+      "monte_carlo_band": "import numpy as np\n\ndef monte_carlo_band(simulate_once, runs=1000, quantiles=(2.5,50,97.5), seed=0):\n    rng = np.random.default_rng(seed)\n    results = []\n    for _ in range(runs):\n        results.append(simulate_once(rng))\n    arr = np.array(results)\n    q = np.percentile(arr, quantiles, axis=0)\n    return q  # shape: (len(quantiles), T)\n",
+      "explicit_diffusion_1d": "import numpy as np\n\ndef solve_diffusion_1d(u0, D, dt, dx, steps, bc='neumann', u_left=0.0, u_right=0.0):\n    \"\"\"Explicit finite difference for 1D diffusion.\n    Stability (minimum statement for paper): r = D*dt/dx^2 <= 0.5.\n    bc: 'neumann' (no-flux) or 'dirichlet' (fixed value).\n    \"\"\"\n    r = D*dt/dx**2\n    if r > 0.5:\n        raise ValueError(f'Unstable explicit scheme: r={r:.3f} > 0.5. Reduce dt or increase dx.')\n    u = u0.astype(float).copy()\n    for _ in range(steps):\n        un = u.copy()\n        u[1:-1] = un[1:-1] + r*(un[2:] - 2*un[1:-1] + un[:-2])\n        if bc == 'neumann':\n            # no-flux: du/dn=0 -> mirror boundary\n            u[0] = u[1]\n            u[-1] = u[-2]\n        elif bc == 'dirichlet':\n            u[0] = u_left\n            u[-1] = u_right\n        else:\n            raise ValueError('bc must be neumann or dirichlet')\n    return u\n",
+      "graph_laplacian_diffusion": "import numpy as np\n\ndef graph_laplacian(A):\n    # A: adjacency matrix\n    D = np.diag(A.sum(axis=1))\n    return D - A\n\ndef diffuse_on_graph(u, A, Dcoef, dt, steps, reaction=None):\n    L = graph_laplacian(A)\n    u = u.astype(float).copy()\n    for _ in range(steps):\n        du = -Dcoef * (L @ u)\n        if reaction is not None:\n            du = du + reaction(u)\n        u = u + dt*du\n    return u\n",
+      "pareto_nondominated": "def pareto_nondominated(points):\n    # points: list of (J1,J2) to minimize\n    nd = []\n    for i,p in enumerate(points):\n        dominated = False\n        for j,q in enumerate(points):\n            if j==i: continue\n            if (q[0] <= p[0] and q[1] <= p[1]) and (q[0] < p[0] or q[1] < p[1]):\n                dominated = True\n                break\n        if not dominated:\n            nd.append(p)\n    return nd\n",
+      "knee_point": "import numpy as np\n\ndef knee_point(front):\n    \"\"\"Pick a knee point on a 2D Pareto front (both objectives minimized).\n    Uses max distance to the line connecting the two extreme points.\n    front: list of (J1, J2)\n    returns: (J1, J2)\n    \"\"\"\n    pts = np.array(front, dtype=float)\n    if len(pts) == 0:\n        return None\n    # sort by J1\n    pts = pts[np.argsort(pts[:,0])]\n    A = pts[0]; B = pts[-1]\n    AB = B - A\n    denom = np.linalg.norm(AB)\n    if denom < 1e-12:\n        return tuple(pts[len(pts)//2])\n    # distance from each point to line AB\n    d = np.abs(np.cross(AB, pts - A) / denom)\n    idx = int(np.argmax(d))\n    return tuple(pts[idx])\n"
+    }
+  }
+}

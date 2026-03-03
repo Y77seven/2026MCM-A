@@ -1,0 +1,90 @@
+{
+  "version": "2026.01_Full_Spec",
+  "metadata": {
+    "title": "MCM/ICM O-Award Pixel-Level Imitation Rulebook",
+    "creator": " ",
+    "background": " "
+  },
+  "protocol_1_structure_and_visuals": {
+    "title_logic": {
+      "formula": "[Metaphor/Narrative] : [Technical description]",
+      "forbidden": ["A Study of", "Research on", "Based on"],
+      "examples": [
+        "Where Footsteps Collide: A Spatiotemporal Model of Stair Wear",
+        "Cracking the Cyber Puzzle: A Data-Driven Framework for..."
+      ]
+    },
+    "model_architecture": {
+      "target_count": "5-8 modules",
+      "quadrant_requirement": {
+        "Data_Layer": "PCA / Clustering / Preprocessing",
+        "Core_Layer": "Regression / PDE / Optimization / Mechanism",
+        "Uncertainty_Layer": "Monte Carlo / Bayesian / Interval",
+        "Defense_Layer": "Validation / Sensitivity / Limitations"
+      }
+    },
+    "visual_standards": {
+      "total_figs": "14-16",
+      "must_have_types": ["Flowchart", "Heatmap/Map", "Bar/Line", "Validation Plot", "Sensitivity Plot"],
+      "model_to_fig_ratio": "1 model ≈ 2-3 figures (Input/Structure, Output/Results, Diagnostic)"
+    },
+    "output_requirement": "Numerical + Uncertainty + Policy/Memo layer"
+  },
+  "protocol_2_abstract_precision": {
+    "length_and_visual": {
+      "word_count": "300-500 words",
+      "paragraphs": "4-6 dense paragraphs",
+      "visual_goal": "Fill one full summary page (leave 1/4 for title/keywords)"
+    },
+    "word_allocation": {
+      "Context_Objective": "50-80 words",
+      "Sub_tasks_Core": "200-300 words (60-100 per task)",
+      "Validation_Conclusion": "50-100 words"
+    },
+    "high_signal_patterns": {
+      "openings": ["Against this backdrop...", "It is imperative to...", "...prompts the question..."],
+      "modeling_desc": ["...is grounded in [Theory]...", "...tailored to the specific context of...", "...integrate [A] and [B] to..."],
+      "quantitative_results": ["...achieving a [Percentage] increase/reduction.", "Specifically, when [Var] reaches [Val], [Res] amounts to [Num]."],
+      "validation_robustness": ["...shows good usability and robustness.", "...identified critical thresholds, such as [Threshold]..."],
+      "decision_implication": ["...offering actionable insights...", "...drafted a memo/letter offering practical recommendations."]
+    },
+    "o_award_checklist": [
+      "No 'This paper studies' opening",
+      "Distinctive model names (PFW, DRD-CE)",
+      "3-5 concrete numerical results minimum",
+      "Explicit mentions of confidence intervals or sensitivity",
+      "Strong action verbs (Develop, Integrate, Quantify)"
+    ]
+  },
+  "protocol_3_content_defense": {
+    "model_naming": {
+      "styles": ["Acronym-based", "Theory-Problem Fusion", "Refined/Modified Prefix"],
+      "language": ["Mundlak-modified", "Bayesian calibration with MCMC", "Wardrop equilibrium-based"]
+    },
+    "modeling_flow": ["Problem Analysis -> Flowchart -> Task-based Execution -> Model Chain/Interface"],
+    "validation_suite": {
+      "methods": ["Empirical/Historical Data", "Cross-scenario Adaptability", "Residual Checking (ACF/PACF)", "Uncertainty Quantification (Monte Carlo)"],
+      "phrases": [
+        "The selected value is proved to be reasonable...",
+        "The prediction aligns well with the actual results...",
+        "The model demonstrates commendable sensitivity and robustness..."
+      ]
+    },
+    "self_critique_framing": {
+      "weakness_to_strength": {
+        "Data_Issue": "Blame external constraints (e.g., historical scarcity)",
+        "Complexity": "Frame as a trade-off for high precision",
+        "Assumptions": "Frame as 'idealized abstractions' for policy speed"
+      },
+      "future_work": "Directing future iterations with granular data or regional linkage"
+    }
+  },
+  "prompt_engine": {
+    "title_prompt": "You are an O-Award title designer. Use [Metaphor]:[Technical]. Sound intriguing yet scientific.",
+    "figure_prompt": "Output 1-3 figures for ONE model. Include: Title (EN+ZH), Purpose, Data Schema, Python Code, Caption Template.",
+    "abstract_prompt": "Write a 300-500 word narrative. No bullets. Include 3-5 numbers. Structure: Context -> Sub-tasks -> Validation -> Policy.",
+    "model_section_prompt": "Describe modeling framework. Must name models (e.g., DRD-CE). Use solution flowcharts. Cite classical theory.",
+    "validation_prompt": "Defend scientific credibility. Use ±10% perturbation. Include statistical metrics (R², AIC/BIC).",
+    "critique_prompt": "Critique without killing credibility. Use strengths-weaknesses parallel points. Pair every weakness with a future fix."
+  }
+}

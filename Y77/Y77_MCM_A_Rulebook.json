@@ -1,0 +1,148 @@
+{
+  "readme": {
+    "core_rules": {
+    "ASMP_001": "标度律锚定：解决'目标系统缺少实测数据'的问题。通过物理相似性从已知系统推导未知参数（使用幂律关系 Y∝X^β）。",
+    "MOD_012": "机理建模：解决'增长/衰减预测'问题。通过推导微分方程dx/dt=f(x)而非拟合经验公式，展示对过程动力学的理解。",
+    "EQ_009": "动态参数化：解决'参数随环境显著变化'问题。将静态常数C改写为连续函数C(x)，避免分段常数的边界奇点。",
+    "VALID_005": "相平面验证：解决'系统稳定性证明'问题。通过特征值分析和相图绘制，证明模型在所有初值下的鲁棒性。",
+    "code_repository": "预制python代码",
+    "magic_phrases_bilingual": "论文填空模板",
+    "rubric_self_check ": "自我质检"
+  },
+  "workflow_integration": {
+  "typical_A_problem_pipeline": {
+    "stage_1_parameter_estimation": {
+      "rule": "ASMP_001",
+      "when_to_use": "题目未提供关键参数的数值",
+      "action": "搜索物理相似系统，应用标度律Y=Y_ref(X/X_ref)^β",
+      "deliverable": "参数初值 + 物理依据说明"
+    },
+    "stage_2_equation_building": {
+      "rules": ["MOD_012", "EQ_009"],
+      "when_to_use": "需要建模系统的时间演化",
+      "action": "从变化率出发建立ODE，动态化环境相关参数",
+      "deliverable": "微分方程组 + 参数函数C(x,t)"
+    },
+    "stage_3_validation": {
+      "rule": "VALID_005",
+      "when_to_use": "方程求解完成后",
+      "action": "计算特征值，绘制相图，分析渐近稳定性",
+      "deliverable": "相图 + 稳定性证明 + 收敛时间估算"
+    }
+  },
+  "synergy_example": "对于'种群在变化环境中增长'类问题：ASMP_001估计初始种群参数 → MOD_012建立Logistic方程dN/dt=rN(1-N/K) → EQ_009将K函数化为K(资源密度) → VALID_005验证N*的稳定性"
+},
+
+
+  "meta": {
+    "version": "5.0_CN_Enhanced",
+    "architect": "MCM_A_Methodology_Agent",
+    "philosophy": "物理直觉 (Physical Intuition) -> 数学形式化 (Mathematical Formalization) -> 严格验证 (Rigorous Validation)",
+    "description": "MCM A题物理建模通用规则库 (中英双语版) - 包含从O奖论文中提炼的标度律、动态参数化及相平面分析法则。"
+  },
+  "core_rules": [
+    {
+      "id": "ASMP_001",
+      "name": "Scaling Law Anchoring (标度律锚定法)",
+      "trigger_condition": "目标参数未知 (Unknown Parameter) 且 无实测数据 (No Empirical Data) 且 存在物理相似系统 (Physical Similarity)",
+      "action_step_by_step": [
+        "Step 1: 识别主导物理机制 (Identify Mechanism)。例如：若主导机制为散热，则与表面积/体积比相关 -> 指数取 2/3；若为生物代谢网络，则遵循 Kleiber定律 -> 指数取 3/4。",
+        "Step 2: 建立异速生长方程 (Establish Allometric Equation)。公式为 Y_target = Y_ref * (X_target / X_ref)^beta。",
+        "Step 3: 进行量纲一致性检查 (Dimensional Check)。确保方程两端物理单位在缩放后保持一致。",
+        "Step 4: 验证物理极限 (Validate Limits)。检查估算出的数值是否违背基本能量守恒或热力学定律。"
+      ],
+      "rationale_deep": "拒绝线性外推 (Linear Extrapolation)。复杂系统（如生物体、流体、天体）的属性通常随尺度呈非线性变化。引用以物理学家命名的定律（如 Kleiber's Law, Stokes' Law）比单纯的线性假设更能体现对物理本质的理解，符合 O奖对'机理建模'的偏好。"
+    },
+    {
+      "id": "MOD_012",
+      "name": "Resource-Constrained Retardation Growth (资源受限阻滞生长)",
+      "trigger_condition": "系统具有自增长趋势 (Self-reproduction) 但受限于环境容量 (Finite Capacity)",
+      "action_step_by_step": [
+        "Step 1: 定义状态变量 X(t) 及其物理上限 K (Carrying Capacity)。",
+        "Step 2: 构建微分方程 (Construct ODE)。形式为：变化率 = 增长项 - 阻滞项 (dX/dt = Growth - Retardation)。",
+        "Step 3: 引入负反馈项 (Negative Feedback)。通常形式为 (1 - X/K)，表示随着 X 接近 K，增长率趋于零。",
+        "Step 4: 渐近分析 (Asymptotic Analysis)。证明当 t -> ∞ 时，X(t) -> K，且 dX/dt -> 0。"
+      ],
+      "rationale_deep": "避免直接使用经验公式拟合 (Curve Fitting)。通过推导变化率方程 (ODE)，展示了对过程动力学 (Process Dynamics) 的理解。评委看重的是'方程是如何建立的'，而不仅仅是'方程是什么'。"
+    },
+    {
+      "id": "EQ_009",
+      "name": "Dynamic Parameterization (动态参数函数化)",
+      "trigger_condition": "参数在研究域内变化显著 (Significant Variation) 或 存在关键的空间梯度 (Spatial Gradients)",
+      "decision_tree_logic": {
+        "step_1_quantify": "量化变化幅度：计算参数 P 在时空域内的相对变化率 R = (P_max - P_min) / P_avg。",
+        "step_2_decide": "判定策略：若 R > 0.2 (20%) -> 必须函数化 (Must Functionalize)；若 0.05 < R <= 0.2 -> 视灵敏度分析结果而定；若 R < 0.05 -> 可视为常数。",
+        "step_3_select": "选择函数形式：若过程具有特征衰减尺度 -> 选择指数函数 (Exponential)；若过程存在饱和上限 -> 选择 Logistic 函数；若过程具有标度不变性 -> 选择幂律函数 (Power Law)。",
+        "step_4_verify": "验证边界条件：检查 x -> 0 和 x -> ∞ 时，C(x) 是否收敛于已知的物理极限值。"
+      },
+      "anti_pattern_comparison": {
+        "bad_practice": "分段常数陷阱 (Piecewise Constant Trap)",
+        "scenario_description": "例如：将阻力系数设为：前段距离 C=1，后段距离 C=2。",
+        "why_it_fails_quantitative": "1. 数学奇点 (Mathematical Singularity)：在分段点处导数无穷大 (Dirac Delta)，导致数值求解器步长骤减或崩溃。2. 物理谬误：违反'自然界无跳跃' (Natura non facit saltus) 原则。3. 误差累积：边界处的局部误差可能高达 100%。",
+        "o_award_fix": "使用连续过渡函数 (Continuous Transition Function)，如 Sigmoid 或平滑的指数函数，确保处处可微 (Differentiable everywhere)。"
+      }
+    },
+    {
+      "id": "VALID_005",
+      "name": "Phase Plane Verification (相平面验证法)",
+      "trigger_condition": "模型为耦合微分方程组 (System of ODEs) 且需要证明稳定性",
+      "action_step_by_step": [
+        "Step 1: 求平衡点 (Equilibria)。令所有 dx_i/dt = 0，解代数方程组得到稳态点 X*。",
+        "Step 2: 线性化 (Linearization)。构建雅可比矩阵 (Jacobian Matrix) J = ∂f_i/∂x_j。",
+        "Step 3: 特征值分析 (Eigenvalue Analysis)。求解 |J - λI| = 0 得到特征值 λ。",
+        "Step 4: 绘制相图 (Phase Portrait)。画出零斜线 (Nullclines) 和流场 (Vector Field)。"
+      ],
+      "eigenvalue_map": {
+  "Re_negative_Im_nonzero": {
+    "pattern_name": "Spiral Sink (螺旋汇)",
+    "physical_behavior": "Damped Oscillation - 阻尼振荡",
+    "characteristic": "系统在振荡中逐渐收敛，存在能量耗散机制",
+    "applicable_to": [
+      "包含阻力/摩擦的周期系统",
+      "具有负反馈的控制系统",
+      "耦合振子网络的同步过程"
+    ]
+  },
+  "Re_negative_Im_zero": {
+    "pattern_name": "Nodal Sink (节点汇)",
+    "physical_behavior": "Overdamped - 过阻尼",
+    "characteristic": "系统单调衰减至平衡，无振荡",
+    "applicable_to": [
+      "扩散主导的传输过程",
+      "高粘性流体的流动",
+      "缓慢的化学反应平衡"
+    ]
+  }
+}
+    }
+  ],
+  "code_repository": {
+    "utils_py": "import numpy as np\nimport matplotlib.pyplot as plt\nfrom scipy.integrate import odeint\nfrom scipy.optimize import fsolve\n\n# --- Module 1: Scaling Law Anchoring (标度律锚定法) ---\n\ndef apply_scaling_law(ref_val: float, ref_scale: float, target_scale: float, beta: float) -> float:\n    \"\"\"\n    基于异速生长律估算未知物理量 (Estimate unknown parameter via Allometric Scaling)\n    \n    Args:\n        ref_val: 参考系统的已知值 (e.g., 人类代谢率)\n        ref_scale: 参考系统的特征尺度 (e.g., 人类体重)\n        target_scale: 目标系统的特征尺度 (e.g., 龙的体重)\n        beta: 标度指数 (0.75 for Kleiber's Law, 0.67 for Surface Area)\n        \n    Returns:\n        Estimated value for target system.\n    \"\"\"\n    if ref_scale <= 0 or target_scale <= 0:\n        raise ValueError(\"Scale dimensions must be positive\")\n    \n    scaling_factor = (target_scale / ref_scale) ** beta\n    return ref_val * scaling_factor\n\n# --- Module 2: Logistic/ODE Modeling (ODE机理建模) ---\n\ndef logistic_growth_model(y, t, r, K):\n    \"\"\"\n    资源受限生长的微分方程 (Differential equation for resource-constrained growth)\n    Usage: sol = odeint(logistic_growth_model, y0, t, args=(r, K))\n    \"\"\"\n    dydt = r * y * (1 - y / K)\n    return dydt\n\n# --- Module 3: Dynamic Parameterization (动态参数化) ---\n\ndef parameterize_coefficient(state_var, func_type, params):\n    \"\"\"\n    根据状态变量动态计算系数 (Dynamically calculate coefficient)\n    \n    Args:\n        state_var: 归一化状态变量 (e.g., x/L)\n        func_type: 'exponential', 'logistic', or 'power_law'\n        params: 参数字典 (C0, L, k, beta, etc.)\n    \"\"\"\n    if func_type == 'exponential':\n        # 衰减过程 (Decay): C = C0 * exp(-x/L)\n        return params['C0'] * np.exp(-state_var / params.get('L', 1.0))\n    \n    elif func_type == 'logistic':\n        # 饱和/开关过程 (Saturation/Switching): C = Cmax / (1 + exp(-k(x-x0)))\n        return params['Cmax'] / (1 + np.exp(-params['k'] * (state_var - params['x0'])))\n    \n    elif func_type == 'power_law':\n        # 标度过程 (Scaling): C = C0 * (x/x0)^beta\n        base = np.maximum(state_var / params.get('x0', 1.0), 1e-6)\n        return params['C0'] * (base ** params['beta'])\n    \n    else:\n        raise ValueError(f\"Unsupported function type: {func_type}\")\n\n# --- Module 4: Stability Analysis (相平面稳定性分析) ---\n\ndef stability_analysis_2d(func_dxdt, func_dydt, x_range, y_range, params):\n    \"\"\"\n    执行完整的稳定性分析：平衡点、雅可比矩阵、特征值、相图\n    (Full stability analysis: Equilibria, Jacobian, Eigenvalues, Phase Portrait)\n    \"\"\"\n    # 1. 定义方程组以求解平衡点\n    def system(vars):\n        x, y = vars\n        return [func_dxdt(x, y, *params), func_dydt(x, y, *params)]\n    \n    # 2. 求解平衡点 (Guessing [1,1])\n    try:\n        x_eq, y_eq = fsolve(system, [1.0, 1.0])\n        print(f\"\\n📍 Equilibrium Point found at: ({x_eq:.4f}, {y_eq:.4f})\")\n    except:\n        print(\"Could not converge to equilibrium.\")\n        return\n\n    # 3. 数值计算雅可比矩阵 (Calculate Jacobian numerically)\n    delta = 1e-5\n    val_x = func_dxdt(x_eq, y_eq, *params)\n    val_y = func_dydt(x_eq, y_eq, *params)\n    \n    fx = (func_dxdt(x_eq+delta, y_eq, *params) - val_x) / delta\n    fy = (func_dxdt(x_eq, y_eq+delta, *params) - val_x) / delta\n    gx = (func_dydt(x_eq+delta, y_eq, *params) - val_y) / delta\n    gy = (func_dydt(x_eq, y_eq+delta, *params) - val_y) / delta\n    \n    J = np.array([[fx, fy], [gx, gy]])\n    print(\"\\nJacobian Matrix J:\")\n    print(J)\n    \n    # 4. 特征值分析 (Eigenvalue Analysis)\n    eigenvals = np.linalg.eigvals(J)\n    print(f\"\\n🔢 Eigenvalues: {eigenvals}\")\n    re = eigenvals.real\n    im = eigenvals.imag\n    \n    # 物理判定\n    if all(re < 0):\n        status = \"STABLE (Sink) - 稳定汇\"\n        if any(im != 0): status += \" [Spiral/Underdamped - 螺旋收敛/阻尼振荡]\"\n        else: status += \" [Nodal/Overdamped - 节点收敛/过阻尼]\"\n    elif any(re > 0):\n        status = \"UNSTABLE (Source/Saddle) - 不稳定\"\n    else:\n        status = \"MARGINAL (Center) - 临界稳定/等幅振荡\"\n    print(f\"Diagnosis: {status}\")\n    \n    # 5. 绘制相图 (Plot Phase Portrait)\n    x = np.linspace(*x_range, 20)\n    y = np.linspace(*y_range, 20)\n    X, Y = np.meshgrid(x, y)\n    U = func_dxdt(X, Y, *params)\n    V = func_dydt(X, Y, *params)\n    \n    plt.figure(figsize=(8, 6))\n    plt.streamplot(X, Y, U, V, density=1.5, color='gray')\n    plt.plot(x_eq, y_eq, 'ro', markersize=10, label='Equilibrium (平衡点)')\n    plt.title(f'Phase Portrait\\nEigenvalues: {eigenvals[0]:.2f}, {eigenvals[1]:.2f}')\n    plt.xlabel('State X')\n    plt.ylabel('State Y')\n    plt.legend()\n    plt.grid(True)\n    plt.show()"
+      
+},
+  "magic_phrases_bilingual": {
+    "assumption_justification": {
+      "en": "To estimate [Unknown Parameter] in the absence of direct data, we invoke the scaling law [Y] is proportional to [X]^beta.",
+      "cn": "为了在缺乏直接数据的情况下估算 [未知参数]，我们引用标度律：[Y] 与 [X] 的 beta 次方成正比。",
+      "logic": "The exponent beta=[Value] derives from [Dominant Physical Mechanism]. (指数 beta 源于 [主导物理机制]，如分形网络或表面积体积比。)"
+    },
+    "dynamic_parameterization": {
+      "en": "Rather than imposing piecewise constants for [Coefficient C], we formulate it as a continuous function constrained by [Physical Law].",
+      "cn": "与其强制设定分段常数来描述 [系数 C]，我们将其构建为受 [物理定律] 约束的连续函数。",
+      "benefit": "This ensures differentiability and enables gradient-based sensitivity analysis. (这保证了模型的可微性，并支持基于梯度的灵敏度分析。)"
+    },
+    "stability_verification": {
+      "en": "The Jacobian at equilibrium yields eigenvalues with Re(lambda) < 0, confirming asymptotic stability.",
+      "cn": "平衡点处的雅可比矩阵特征值实部小于0，证实了系统的渐近稳定性。",
+      "implication": "Physically, this implies that perturbations decay over time due to energy dissipation. (物理上，这意味着扰动会因能量耗散随时间衰减。)"
+    }
+  },
+  "rubric_self_check": {
+    "assumption_check": "假设验证：是否引用了具体的物理定律（如 Kleiber, Stokes）而非仅仅是'假设'？(Did you cite specific physical laws?)",
+    "mechanism_check": "机理建模：所有的增长/衰减是否都有 ODE 推导，而非直接套用公式？(Are ODEs derived?)",
+    "complexity_check": "模型复杂度：参数是否体现了环境的时空异质性（动态函数化）？(Are parameters dynamic?)",
+    "validation_check": "稳定性验证：是否计算了特征值并绘制了相图，而非仅展示时间序列？(Eigenvalues & Phase Portrait?)"
+  }
+}
+
+}

@@ -1,0 +1,378 @@
+{
+  "meta": {
+    "version": "5.0_Golden_Release",
+    "creation_date": "2026-01-23",
+    "architect": "MCM_A_Methodology_Agent",
+    "training_data": {
+      "source_1": "2019 MCM Problem A (Dragons) - O Prize Papers (Ecological/Descriptive)",
+      "source_2": "2022 MCM Problem A (Cyclist) - Paper #2207343 (Mechanical/Optimization)"
+    },
+    "applicable_contests": [
+      "MCM Problem A (Continuous)",
+      "ICM Problem D (Operations/Network)"
+    ],
+    "philosophy": "Physical Intuition (物理直觉) → Mathematical Formalization (数学形式化) → Rigorous Validation (严格验证)",
+    "description": "MCM Problem A 物理建模全栈规则库。涵盖从参数估算、机理建模、动态环境适配、稳定性验证到受力分析与策略优化的完整方法论。",
+    "supported_problem_types": [
+      "Descriptive/Ecological",
+      "Mechanics/Optimization",
+      "Hybrid_Trajectory"
+    ],
+    "total_rules": 6,
+    "coverage": "90%+ of historical MCM A problems"
+  },
+  "quick_index": {
+    "by_problem_scenario": {
+      "缺少数据/未知参数": "ASMP_001",
+      "种群增长/衰减预测": "MOD_012",
+      "参数随环境/时间变化": "EQ_009",
+      "验证系统稳定性": "VALID_005",
+      "受力分析/能量消耗": "FBD_001",
+      "制定最佳策略/控制": "OPT_001"
+    },
+    "by_keyword": {
+      "growth": ["MOD_012", "VALID_005"],
+      "optimize": ["OPT_001", "FBD_001"],
+      "unknown": ["ASMP_001"],
+      "dynamic": ["EQ_009"],
+      "stability": ["VALID_005"],
+      "trajectory": ["FBD_001", "EQ_009"]
+    },
+    "by_math_tool": {
+      "ODE求解": ["MOD_012", "FBD_001"],
+      "优化算法/变分法": ["OPT_001"],
+      "标度律/幂律": ["ASMP_001"],
+      "特征值分析": ["VALID_005"],
+      "连续函数构造": ["EQ_009"]
+    }
+  },
+  "__ROUTER__": {
+    "TYPE_A_DESCRIPTIVE": {
+      "description": "描述型/分析型问题：预测系统行为、分析稳定性 (e.g., 种群增长、生态平衡)",
+      "trigger_keywords": ["predict", "analyze", "describe", "model", "stability", "growth"],
+      "activated_rules": ["ASMP_001", "MOD_012", "EQ_009", "VALID_005"],
+      "typical_workflow": "1. ASMP_001 (估算未知参数) → 2. MOD_012 (建立微分方程) → 3. EQ_009 (引入环境动态性) → 4. VALID_005 (相平面验证)"
+    },
+    "TYPE_B_OPTIMIZATION": {
+      "description": "优化型/设计型问题：寻找最佳策略、设计控制方案 (e.g., 竞速策略、能量分配)",
+      "trigger_keywords": ["strategy", "optimize", "minimize", "maximize", "best", "design"],
+      "activated_rules": ["FBD_001", "OPT_001", "EQ_009", "VALID_005"],
+      "typical_workflow": "1. FBD_001 (受力分析建立约束) → 2. OPT_001 (构建优化目标) → 3. EQ_009 (参数化环境梯度) → 4. VALID_005 (验证最优径迹稳定性)"
+    },
+    "TYPE_C_HYBRID": {
+      "description": "混合型问题：先建模物理过程，后优化控制变量 (e.g., 变环境下的轨迹控制)",
+      "trigger_keywords": ["model AND optimize", "trajectory", "control", "dynamic environment"],
+      "activated_rules": ["ALL"],
+      "typical_workflow": "FBD_001/ASMP_001 (混合建模) → EQ_009 (全参数动态化) → OPT_001 (变分法优化) → VALID_005 (鲁棒性检验)"
+    }
+  },
+  "core_rules": [
+    {
+      "id": "ASMP_001",
+      "name": "Scaling Law Anchoring (标度律锚定法)",
+      "type": "descriptive",
+      "branch": "TYPE_A",
+      "abstraction_layer": {
+        "L0_Original": "Using Kleiber's Law q ~ w^0.75...",
+        "L3_Universal": "IF [目标参数未知] AND [存在物理相似系统], THEN [应用异速生长律 Y = aX^beta].",
+        "L4_Meta": "评委偏好物理类比 (Physical Analogy) 胜过线性外推 (Linear Extrapolation)。"
+      },
+      "decision_logic": {
+        "trigger": "无数据 + 存在相似系统",
+        "action": "选择指数 beta: 2/3 (散热/表面积), 3/4 (代谢/分形网络), 1/3 (线性尺度)",
+        "validation": "量纲分析 (Dimensional Analysis)"
+      },
+      "rubric_mapping": "Assumption Justification: 4/4 (Explicit physical basis)",
+      "failure_case": {
+        "scenario": "估算巨兽能耗",
+        "error": "线性外推 (beta=1) -> 相对误差 +216% (严重高估)",
+        "correction": "使用 Kleiber's Law (beta=0.75)"
+      }
+    },
+    {
+      "id": "MOD_012",
+      "name": "Resource-Constrained Retardation Growth (资源受限阻滞生长)",
+      "type": "descriptive",
+      "branch": "TYPE_A",
+      "abstraction_layer": {
+        "L0_Original": "Derive dw/dt = r*w*(1-w/wm)...",
+        "L3_Universal": "IF [自增长] AND [环境容量有限], THEN [构建 ODE: dx/dt = rx(1-x/K)].",
+        "L4_Meta": "评委偏好机理推导 (Mechanistic Derivation) 胜过公式套用 (Formula Application)。"
+      },
+      "decision_logic": {
+        "trigger": "增长过程 + 物理上限",
+        "action": "引入负反馈项 (1 - Current/Max)",
+        "validation": "渐近稳定性分析 (t->inf)"
+      },
+      "rubric_mapping": "Use of Physical Principles: 4/4 (ODE derivation)",
+      "failure_case": {
+        "scenario": "长期生长预测",
+        "error": "多项式拟合 y=at^2+bt -> t趋于无穷时发散，违反质量守恒",
+        "correction": "Logistic 模型 -> 渐近收敛于 K"
+      }
+    },
+    {
+      "id": "EQ_009",
+      "name": "Dynamic Parameterization (动态参数函数化)",
+      "type": "universal",
+      "branch": "TYPE_A+B",
+      "abstraction_layer": {
+        "L0_Original": "Scarcity factor depends on density...",
+        "L3_Universal": "IF [参数变化率 > 20%] OR [存在关键梯度], THEN [将常数 P 替换为连续函数 P(x,t)].",
+        "L4_Meta": "动态参数化展示了对环境异质性 (Environmental Heterogeneity) 的捕捉能力。"
+      },
+      "decision_logic": {
+        "step_1_quantify": "计算相对变化率 R = (Pmax-Pmin)/Pavg",
+        "step_2_decide": "R > 0.2 -> 必须函数化",
+        "step_3_select": "衰减->指数函数; 饱和->Logistic; 标度->幂律",
+        "step_4_verify": "检查边界连续性"
+      },
+      "rubric_mapping": "Model Complexity/Realism: 4/4 (Dynamic vs Static)",
+      "failure_case": {
+        "scenario": "空间阻力建模",
+        "error": "分段常数 (Piecewise Constant) -> 边界处导数无穷大，数值解崩溃，局部误差大",
+        "correction": "连续过渡函数 (Sigmoid Transition)"
+      }
+    },
+    {
+      "id": "VALID_005",
+      "name": "Phase Plane Verification (相平面验证法)",
+      "type": "universal",
+      "branch": "TYPE_A+B",
+      "abstraction_layer": {
+        "L0_Original": "Stability analysis via Eigenvalues...",
+        "L3_Universal": "IF [耦合ODE系统], THEN [求平衡点 -> 雅可比矩阵 -> 特征值 -> 相图].",
+        "L4_Meta": "相图证明了模型对初值的鲁棒性 (Robustness)，是O奖的标志。"
+      },
+      "decision_logic": {
+        "trigger": "多变量动力学系统",
+        "action": "计算 Re(lambda) 和 Im(lambda)",
+        "validation": "绘制含零斜线 (Nullclines) 的流场图"
+      },
+      "eigenvalue_physical_map": {
+        "Re_negative_Im_nonzero": {
+          "pattern": "Spiral Sink (螺旋汇)",
+          "physics": "Damped Oscillation (阻尼振荡)",
+          "characteristic": "振荡中收敛, 存在能量耗散",
+          "applicable_to": ["阻尼振子", "负反馈控制", "耦合振荡网络"]
+        },
+        "Re_negative_Im_zero": {
+          "pattern": "Nodal Sink (节点汇)",
+          "physics": "Overdamped (过阻尼)",
+          "characteristic": "单调衰减至平衡, 无振荡",
+          "applicable_to": ["扩散过程", "高粘性流体", "缓慢化学反应"]
+        },
+        "Re_positive": {
+          "pattern": "Source/Saddle (源点/鞍点)",
+          "physics": "Unstable (不稳定)",
+          "characteristic": "微小扰动导致发散",
+          "applicable_to": ["失控反应", "倒立摆", "临界系统"]
+        },
+        "Re_zero_Im_nonzero": {
+          "pattern": "Center (中心点)",
+          "physics": "Conservative Oscillation (保守振荡)",
+          "characteristic": "能量守恒, 永不停歇",
+          "applicable_to": ["无阻力摆", "理想捕食模型"]
+        }
+      },
+      "rubric_mapping": "Model Validation: 4/4 (Mathematical Proof of Stability)",
+      "failure_case": {
+        "scenario": "控制系统稳定性",
+        "error": "仅展示一条时间序列曲线 -> 无法证明对扰动的抵抗力",
+        "correction": "特征值分析 -> 量化收敛速度和震荡频率"
+      }
+    },
+    {
+      "id": "FBD_001",
+      "name": "Force/Energy Anchoring (受力/能量锚定法)",
+      "type": "optimization",
+      "branch": "TYPE_B",
+      "abstraction_layer": {
+        "L0_Original": "P_total = (P_roll + P_slope + P_air)/eta...",
+        "L3_Universal": "IF [物体在物理场中运动], THEN [绘制FBD -> 列出所有能量项 -> 应用 F=ma 或 功率平衡].",
+        "L4_Meta": "第一性原理 (First Principles) 永远优于经验公式。"
+      },
+      "decision_logic": {
+        "trigger": "机械运动/能量收支问题",
+        "action": "建立 P_in = P_out + dE/dt 方程",
+        "simplification_step": "计算无量纲比值，忽略 <1% 的项。禁止在此步使用 ASMP_001！"
+      },
+      "rubric_mapping": "Physical Principles: 4/4 (Derivation from conservation laws)",
+      "failure_case": {
+        "scenario": "高速运动分析",
+        "error": "忽略空气阻力 -> 高速下误差 >200%",
+        "correction": "包含 F_drag ~ v^2 项"
+      }
+    },
+    {
+      "id": "OPT_001",
+      "name": "Optimization Strategy Formulation (优化策略构建法)",
+      "type": "optimization",
+      "branch": "TYPE_B",
+      "abstraction_layer": {
+        "L0_Original": "Find P(t) to minimize Time s.t. Energy constraint...",
+        "L3_Universal": "IF [寻找最佳策略], THEN [定义决策变量 u(t) -> 构建目标 J -> 列出约束 g<=0].",
+        "L4_Meta": "展示如何利用物理规律指导决策。"
+      },
+      "structure_template": {
+        "Basic_Level": {
+          "最小化": "目标量 (Time/Energy/Distance)",
+          "决策变量": "可控参数 (Power/Velocity)",
+          "约束": "物理定律 (来自FBD) + 性能限制 (P≤P_max) + 边界条件"
+        },
+        "Advanced_Level": {
+          "variational_form": "min J = ∫₀ᵀ L(x,u,t)dt + Φ(x(T))",
+          "dynamics_constraint": "ẋ = f(x,u) (来自FBD_001)",
+          "inequality_constraint": "g(u,x) ≤ 0",
+          "boundary_condition": "h(x(0), x(T)) = 0"
+        }
+      },
+      "objective_function_taxonomy": {
+        "min_time": {
+          "form": "min T = ∫ dt/v(s) ds",
+          "meaning": "速度优先",
+          "scenario": "竞速/救援"
+        },
+        "min_energy": {
+          "form": "min E = ∫ P(t) dt",
+          "meaning": "经济性优先",
+          "scenario": "长途运输/电池供电"
+        },
+        "max_distance": {
+          "form": "max S = ∫ v(t) dt",
+          "meaning": "覆盖范围优先",
+          "scenario": "探测/资源受限探索"
+        }
+      },
+      "applicability_boundary": {
+        "Good_For": "单一明确目标, 连续变量, 物理约束明确",
+        "Bad_For": "多目标冲突 (需Pareto), 离散选择 (需决策树)"
+      },
+      "rubric_mapping": "Problem Formulation: 4/4 (Clear J, u, g definitions)",
+      "failure_case": {
+        "scenario": "变坡度能量分配",
+        "error": "假设均匀功率最优 -> 慢 15%",
+        "correction": "变分优化 -> 上坡高功率/下坡滑行"
+      }
+    }
+  ],
+  "synergy_matrix": [
+    {
+      "combo": "FBD_001 + OPT_001",
+      "scenario": "自行车/赛车策略",
+      "description": "FBD建立动力学约束 (Physics)，OPT寻找最优控制输入 (Strategy)。"
+    },
+    {
+      "combo": "ASMP_001 + MOD_012",
+      "scenario": "未知生物种群",
+      "description": "ASMP提供参数（最大体积、代谢率），MOD描述生长过程。"
+    },
+    {
+      "combo": "FBD_001 + EQ_009",
+      "scenario": "变环境飞行器/潜水器",
+      "description": "FBD建立运动方程，EQ_009将阻力系数/流体密度设为高度/深度的函数。"
+    },
+    {
+      "combo": "ALL (FBD+EQ+OPT+VALID)",
+      "scenario": "Type C 混合轨迹优化",
+      "description": "全流程：物理建模 -> 环境动态化 -> 策略优化 -> 稳定性验证。"
+    }
+  ],
+  "common_pitfalls": {
+    "pitfall_1": {
+      "mistake": "直接假设线性关系 Y=kX",
+      "why_wrong": "忽略尺度效应, 大尺度下误差累积",
+      "correct_approach": "用 ASMP_001 检查幂律关系 (Scaling Law)",
+      "typical_error": "200%+ 在极端尺度"
+    },
+    "pitfall_2": {
+      "mistake": "用多项式拟合增长 y=at²+bt+c",
+      "why_wrong": "t→∞ 时 y→-∞, 违反物理守恒",
+      "correct_approach": "用 MOD_012 建立 ODE 确保渐近收敛",
+      "typical_error": "长期预测完全失效"
+    },
+    "pitfall_3": {
+      "mistake": "只展示一条时间序列",
+      "why_wrong": "无法证明对不同初值的鲁棒性",
+      "correct_approach": "用 VALID_005 绘制相图 (Phase Portrait) 展示全局稳定性",
+      "typical_error": "无法量化收敛速度"
+    },
+    "pitfall_4": {
+      "mistake": "用分段常数描述参数",
+      "why_wrong": "边界不连续, 导数无穷大",
+      "correct_approach": "用 EQ_009 构造连续过渡函数 (Sigmoid/Exp)",
+      "typical_error": "数值解崩溃, 局部误差 100%+"
+    },
+    "pitfall_5": {
+      "mistake": "忽略关键阻力项 (如空气阻力)",
+      "why_wrong": "高速下该项占主导 (70-90%)",
+      "correct_approach": "用 FBD_001 列出所有力, 基于数量级分析决定是否忽略",
+      "typical_error": "速度预测误差 >200%"
+    }
+  },
+  "magic_phrases_library": {
+    "ASMP_001": {
+      "template_en": "To estimate [Unknown Parameter] in the absence of direct data, we invoke the scaling law Y ∝ X^β, where β=[Value] derives from [Physical Mechanism].",
+      "template_cn": "为了在缺乏直接数据的情况下估算 [未知参数]，我们引用标度律 Y ∝ X^β。指数 β=[数值] 源于 [物理机制]。",
+      "example": "To estimate metabolic rate, we invoke Kleiber's law q ∝ M^0.75, derived from fractal network efficiency."
+    },
+    "MOD_012": {
+      "template_en": "To model the dynamics of [System] constrained by [Resource], we construct the governing equation dX/dt = rX(1 - X/K). The term (1 - X/K) represents [Negative Feedback].",
+      "template_cn": "为了模拟受 [资源] 限制的 [系统] 动力学，我们构建控制方程 dX/dt = rX(1 - X/K)。其中 (1 - X/K) 项代表 [负反馈机制]。",
+      "example": "The term (1 - N/K) represents environmental resistance due to limited food supply."
+    },
+    "EQ_009": {
+      "template_en": "Rather than imposing piecewise constants for [Coefficient], we formulate it as a continuous function C(x) constrained by [Physical Law], ensuring differentiability.",
+      "template_cn": "与其强制设定分段常数来描述 [系数]，我们将其构建为受 [物理定律] 约束的连续函数 C(x)，以保证模型的可微性。",
+      "example": "We formulate the drag coefficient as C_d(h) = C_0 * exp(-h/H) to reflect atmospheric thinning."
+    },
+    "VALID_005": {
+      "template_en": "We perform phase plane analysis to verify stability. The Jacobian eigenvalues with Re(λ) < 0 indicate [Spiral/Nodal] convergence, proving robustness against perturbations.",
+      "template_cn": "我们进行相平面分析以验证稳定性。雅可比矩阵特征值实部小于0，表明系统呈 [螺旋/节点] 收敛，证明了对扰动的鲁棒性。",
+      "example": "Eigenvalues λ = -0.5 ± 2i indicate a stable spiral sink with damped oscillations."
+    },
+    "FBD_001": {
+      "template_en": "We establish the governing equation via [Force/Energy] balance. Applying [Newton's 2nd Law], the [Input] must overcome [Resistance Terms], yielding the formulation [Equation].",
+      "template_cn": "我们通过 [受力/能量] 平衡建立控制方程。应用 [牛顿第二定律]，[输入项] 必须克服 [阻力项]，从而得到公式 [方程]。",
+      "example": "Applying power balance, P_legs = P_air + P_roll + dE/dt."
+    },
+    "OPT_001": {
+      "template_en": "We formulate the strategy as an optimization problem: minimize [Objective] subject to [Physical Constraints]. The decision variable u(t) is dynamically adjusted to exploit [Gradients].",
+      "template_cn": "我们将策略制定为优化问题：在满足 [物理约束] 的前提下最小化 [目标函数]。决策变量 u(t) 根据 [梯度] 进行动态调整。",
+      "example": "Minimize Time T subject to Energy E < E_max. The power output P(t) adjusts to slope gradients."
+    }
+  },
+  "usage_guide": {
+    "how_to_select_rules": {
+      "step_1": "阅读题目，提取关键词 (Predict? Optimize?)",
+      "step_2": "查询 __ROUTER__ 确定问题类型 (A/B/C)",
+      "step_3": "在 Quick Index 中查找对应工具",
+      "step_4": "按 Typical Workflow 顺序组合 Core Rules"
+    },
+    "workflow_examples": [
+      {
+        "type": "Case 1: 种群/生态 (Type A)",
+        "flow": "ASMP_001 (补全参数) → MOD_012 (微分方程) → VALID_005 (稳定性证明)"
+      },
+      {
+        "type": "Case 2: 竞速/策略 (Type B)",
+        "flow": "FBD_001 (物理约束) → EQ_009 (赛道/环境参数化) → OPT_001 (求解最优控制)"
+      },
+      {
+        "type": "Case 3: 变环境轨迹设计 (Type C)",
+        "flow": "FBD_001 (建立运动学) → EQ_009 (动态化阻力C(x)) → OPT_001 (求最优轨迹) → VALID_005 (验证鲁棒性)",
+        "example": "火箭在变密度大气层中的最优上升轨迹"
+      }
+    ]
+  },
+  "code_repository": {
+    "full_python_utils": "import numpy as np\nimport matplotlib.pyplot as plt\nfrom scipy.optimize import fsolve, minimize\nfrom scipy.integrate import odeint\n\n# --- Rule: ASMP_001 (Scaling) ---\ndef apply_scaling_law(ref_val, ref_scale, target_scale, beta):\n    return ref_val * (target_scale / ref_scale) ** beta\n\n# --- Rule: MOD_012 (Logistic ODE) ---\ndef logistic_growth_model(y, t, r, K):\n    return r * y * (1 - y / K)\n\n# --- Rule: EQ_009 (Dynamic Param) ---\ndef parameterize_coefficient(state_var, func_type, params):\n    if func_type == 'exponential':\n        return params['C0'] * np.exp(-state_var / params.get('L', 1.0))\n    elif func_type == 'logistic':\n        return params['Cmax'] / (1 + np.exp(-params['k'] * (state_var - params['x0'])))\n    return params['C0']\n\n# --- Rule: VALID_005 (Phase Plane) ---\ndef stability_analysis_2d(func_dxdt, func_dydt, x_range, y_range, params):\n    \"\"\"Calculates eigenvalues and plots phase portrait.\"\"\"\n    # Placeholder: Implement meshgrid, streamplot, and eigvals here\n    pass\n\n# --- Rule: FBD_001 (Force Balance) ---\ndef power_balance(v, slope, params):\n    \"\"\"Calculates power required to maintain velocity v on slope.\"\"\"\n    m, g, C_d, rho, A, C_rr = params['m'], 9.81, params['Cd'], params['rho'], params['A'], params['Crr']\n    F_gravity = m * g * np.sin(slope)\n    F_roll = m * g * np.cos(slope) * C_rr\n    F_drag = 0.5 * rho * A * C_d * v**2\n    return (F_gravity + F_roll + F_drag) * v\n\n# ==========================================\n# 使用示例 (Usage Examples)\n# ==========================================\n\n# Example 1: ASMP_001 - 估算未知生物代谢率\n# Scenario: 已知人类(70kg)代谢率70W，估算500kg生物的代谢率(Kleiber's Law)\nq_human = 70; m_human = 70; m_creature = 500; beta = 0.75\nq_creature = apply_scaling_law(q_human, m_human, m_creature, beta)\nprint(f\"Estimated metabolic rate: {q_creature:.2f} W\")\n\n# Example 2: MOD_012 - 求解种群增长\nt = np.linspace(0, 20, 100)\ny0 = 10\nsolution = odeint(logistic_growth_model, y0, t, args=(0.5, 1000))\n\n# Example 3: EQ_009 - 动态阻力系数随高度变化\naltitude = np.linspace(0, 10, 100)\nparams = {'C0': 0.5, 'L': 7.5}\nC_d = [parameterize_coefficient(h, 'exponential', params) for h in altitude]\n\n# Example 4: FBD_001 + OPT_001 - 简单功率优化\n# 寻找最小功率对应的速度 (假设平地)\nparams_bike = {'m': 80, 'Cd': 0.5, 'rho': 1.2, 'A': 0.5, 'Crr': 0.003}\nres = minimize(lambda v: power_balance(v, 0, params_bike), x0=10, bounds=[(5, 20)])\nprint(f\"Optimized Velocity: {res.x[0]:.2f} m/s\")"
+  },
+  "rubric_self_check": {
+    "assumption_check": "假设验证：是否引用了具体物理定律（如 Kleiber, Stokes）？(Did you cite specific physical laws?)",
+    "mechanism_check": "机理建模：所有的 ODE 是否都有推导过程，而非直接套用？(Are ODEs derived?)",
+    "complexity_check": "模型复杂度：参数是否动态化 (C(x)) 以体现环境异质性？(Are parameters dynamic?)",
+    "validation_check": "稳定性验证：是否计算了特征值并绘制了相图？(Eigenvalues & Phase Portrait?)",
+    "optimization_check": "优化策略：目标函数 J 和决策变量 u(t) 是否定义清晰？(Clear Objective & Control?)"
+  }
+}

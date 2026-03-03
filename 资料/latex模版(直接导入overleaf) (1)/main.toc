@@ -1,0 +1,26 @@
+\contentsline {section}{\numberline {1}Introduction}{3}{}%
+\contentsline {subsection}{\numberline {1.1}Problem Background}{3}{}%
+\contentsline {subsection}{\numberline {1.2}Restatement of the Problem}{3}{}%
+\contentsline {subsection}{\numberline {1.3}Literature Review}{4}{}%
+\contentsline {subsection}{\numberline {1.4}Our work}{4}{}%
+\contentsline {section}{\numberline {2}Assumptions and Justifications}{5}{}%
+\contentsline {section}{\numberline {3}Notations}{6}{}%
+\contentsline {section}{\numberline {4}Data Collection}{6}{}%
+\contentsline {section}{\numberline {5}Comprehensive LPR Evaluation Model}{7}{}%
+\contentsline {subsection}{\numberline {5.1}The Degree of Light Pollution(LPD)}{7}{}%
+\contentsline {subsection}{\numberline {5.2}The Impact of Light Pollution(LPI)}{10}{}%
+\contentsline {section}{\numberline {6}Light Pollution Risk Level of Four Locations}{13}{}%
+\contentsline {section}{\numberline {7}Strategy Based on the Prevention of Light Pollution}{15}{}%
+\contentsline {subsection}{\numberline {7.1}Reduced Light Hours}{15}{}%
+\contentsline {subsection}{\numberline {7.2}Replacement of Lighting Fixtures}{16}{}%
+\contentsline {subsection}{\numberline {7.3}Reduce Light pollution from Traffic Electronic Monitoring Equipment}{17}{}%
+\contentsline {section}{\numberline {8}Apply the Strategy for Manhattan and Ashevillel}{18}{}%
+\contentsline {section}{\numberline {9}Sensitivity Analysis }{21}{}%
+\contentsline {subsection}{\numberline {9.1}The Sensitivity of $b$ in $L_{\text {sig}}$ }{21}{}%
+\contentsline {subsection}{\numberline {9.2}The Sensitivity of $C$ in LPR}{22}{}%
+\contentsline {section}{\numberline {10}Model Evaluation and Further Discussion}{22}{}%
+\contentsline {subsection}{\numberline {10.1}Strengths}{22}{}%
+\contentsline {subsection}{\numberline {10.2}Weaknesses and Further Improvements}{23}{}%
+\contentsline {section}{\numberline {11}Pseudo-code template}{23}{}%
+\contentsline {section}{\numberline {12}Flyer}{23}{}%
+\contentsline {section}{References}{25}{}%
